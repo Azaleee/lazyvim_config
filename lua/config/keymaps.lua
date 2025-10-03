@@ -22,3 +22,19 @@ end
 vim.keymap.set("n", "<leader>d", function()
   vim.diagnostic.open_float(nil, { focus = false, border = "rounded" })
 end, { desc = "Show line diagnostics" })
+
+-- For conciseness
+local opts = { noremap = true, silent = true }
+
+-- delete single character without copying into register
+vim.keymap.set("n", "x", '"_x', opts)
+
+-- Increment/decrement numbers
+vim.keymap.set("n", "<leader>+", "<C-a>", opts) -- increment
+vim.keymap.set("n", "<leader>-", "<C-x>", opts) -- decrement
+
+-- Toggle line wrapping
+vim.keymap.set("n", "<leader>lw", "<cmd>set wrap!<CR>", opts)
+
+-- Replace word under cursor
+vim.keymap.set("n", "<leader>j", "*``cgn", opts)
