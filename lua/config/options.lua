@@ -73,4 +73,4 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-
+vim.g.copilot_node_command = "/home/mosmont/.nvm/versions/node/v22.20.0/bin/node"
