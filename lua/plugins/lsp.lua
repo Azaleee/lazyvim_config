@@ -118,6 +118,16 @@ return {
       local util = require("lspconfig.util")
       local mason_lspconfig = require("mason-lspconfig")
 
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "*.cs",
+        callback = function()
+          for _, client in pairs(vim.lsp.get_active_clients({ name = "csharp_ls" })) do
+            if client.supports_method("workspace/diagnostic/refresh") then
+              client.request("workspace/diagnostic/refresh", nil, function() end)
+            end
+          end
+        end,
+      }) 
       -- Setup automatique via mason-lspconfig
       mason_lspconfig.setup_handlers({
         -- Handler par défaut

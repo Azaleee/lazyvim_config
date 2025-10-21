@@ -73,4 +73,15 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+
+-- Désactive la map <Tab> par défaut de Copilot
+vim.g.copilot_no_tab_map = true
+
+-- Définit une nouvelle touche pour accepter la suggestion Copilot
+-- Ici : Ctrl + l (mais tu peux mettre <C-j> ou autre)
+vim.keymap.set("i", "<C-l>", 'copilot#Accept("<CR>")', {
+  expr = true,
+  replace_keycodes = false,
+  desc = "Copilot: accepter la suggestion",
+})
 vim.g.copilot_node_command = "/home/mosmont/.nvm/versions/node/v22.20.0/bin/node"

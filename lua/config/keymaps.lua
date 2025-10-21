@@ -62,3 +62,25 @@ vim.keymap.set("v", "<A-Down>", ":m '>+1<CR>gv=gv", { desc = "Move block down" }
 -- Naviguer entre les buffers ouverts
 vim.keymap.set("n", "<C-,>", ":bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<C-.>", ":bnext<CR>", { desc = "Next buffer" })
+
+local map = vim.keymap.set
+map("n", "<leader>mb", function() require('core.dotnet').build_debug() end, { desc = "dotnet build (debug)" })
+
+map("n", "<leader>mB", function() require('core.dotnet').build_release() end, { desc = "dotnet build (release)" })
+
+map("n", "<leader>mr", function() require('core.dotnet').run() end, { desc = "dotnet run (debug)" })
+
+map("n", "<leader>mR", function() require('core.dotnet').run_release() end, { desc = "dotnet run (release)" })
+map("n", "<leader>mt", function() require('core.dotnet').test() end, { desc = "dotnet test" })
+map("n", "<leader>mp", function() require('core.dotnet').publish() end, { desc = "dotnet publish" })
+map("n", "<leader>mc", function() require("core.dotnet").new_console() end, { desc = "dotnet new console" })
+
+
+vim.keymap.set("n", "<leader>gd", ":DiffviewOpen<CR>", { desc = "Git Diff (Diffview)" })
+vim.keymap.set("n", "<leader>gq", ":DiffviewClose<CR>", { desc = "Quit Diffview" })
+
+vim.keymap.set("n", "<leader>lr", function()
+  vim.diagnostic.reset()
+  vim.cmd("edit")
+end, { desc = "Reload buffer & reset diagnostics" })
+vim.keymap.set("n", "<leader>lR", ":LspRestart<CR>", { desc = "LSP Restart" })
