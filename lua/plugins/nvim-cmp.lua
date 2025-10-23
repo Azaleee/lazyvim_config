@@ -34,7 +34,7 @@ return {
           end
         end, { "i", "s" }),
 
-        ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Entrée pour valider
+        ["<CR>"] = cmp.mapping.confirm({ select = true}), -- Entrée pour valider
         ["<C-Space>"] = cmp.mapping.complete(),
       },
       snippet = {

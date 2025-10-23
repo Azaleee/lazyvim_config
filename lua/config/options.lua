@@ -51,37 +51,19 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   callback = clear_float_bg,
 })
 
--- Exemple : C# = 4 espaces
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "cs", "csharp" },
-  callback = function()
-    vim.opt_local.tabstop = 4
-    vim.opt_local.shiftwidth = 4
-    vim.opt_local.softtabstop = 4
-    vim.opt_local.expandtab = true
-  end,
-})
-
--- Exemple : Lua = 2 espaces
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "lua" },
-  callback = function()
-    vim.opt_local.tabstop = 2
-    vim.opt_local.shiftwidth = 2
-    vim.opt_local.softtabstop = 2
-    vim.opt_local.expandtab = true
-  end,
-})
-
-
--- Désactive la map <Tab> par défaut de Copilot
-vim.g.copilot_no_tab_map = true
-
--- Définit une nouvelle touche pour accepter la suggestion Copilot
--- Ici : Ctrl + l (mais tu peux mettre <C-j> ou autre)
-vim.keymap.set("i", "<C-l>", 'copilot#Accept("<CR>")', {
-  expr = true,
-  replace_keycodes = false,
-  desc = "Copilot: accepter la suggestion",
-})
-vim.g.copilot_node_command = "/home/mosmont/.nvm/versions/node/v22.20.0/bin/node"
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "cs",
+  callback = function()
+    -- Indentation 4 espaces
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.softtabstop = 4
+    vim.bo.expandtab = true
+    
+    -- TreeSitter pour l'indent
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter.indent'.get_indent()"
+    vim.bo.cindent = false
+    vim.bo.smartindent = false
+    vim.bo.autoindent = true
+  end,
+})

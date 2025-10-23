@@ -44,23 +44,26 @@ return {
       { "j-hui/fidget.nvim", opts = {} },
     },
     config = function()
-      -- Fix PATH pour dotnet (WSL via neovide --wsl)
-      local home = vim.fn.expand("$HOME")
-      local dotnet_paths = {
-        home .. "/.dotnet",
-        home .. "/.dotnet/tools",
-        "/usr/share/dotnet",
-        "/usr/local/share/dotnet",
-      }
-      
-      for _, path in ipairs(dotnet_paths) do
-        if vim.fn.isdirectory(path) == 1 then
-          vim.env.PATH = path .. ":" .. vim.env.PATH
+      -- Fix PATH pour dotnet si nécessaire (utile pour WSL/environnements non-standard)
+      -- Vérifie d'abord si dotnet est déjà accessible
+      if vim.fn.executable("dotnet") == 0 then
+        local home = vim.fn.expand("$HOME")
+        local dotnet_paths = {
+          home .. "/.dotnet",
+          home .. "/.dotnet/tools",
+          "/usr/share/dotnet",
+          "/usr/local/share/dotnet",
+        }
+        
+        for _, path in ipairs(dotnet_paths) do
+          if vim.fn.isdirectory(path) == 1 then
+            vim.env.PATH = path .. ":" .. vim.env.PATH
+          end
         end
-      end
-      
-      if not vim.env.DOTNET_ROOT and vim.fn.isdirectory(home .. "/.dotnet") == 1 then
-        vim.env.DOTNET_ROOT = home .. "/.dotnet"
+        
+        if not vim.env.DOTNET_ROOT and vim.fn.isdirectory(home .. "/.dotnet") == 1 then
+          vim.env.DOTNET_ROOT = home .. "/.dotnet"
+        end
       end
 
       -- Capabilities
@@ -111,6 +114,9 @@ return {
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
             end, "[T]oggle Inlay [H]ints")
           end
+          if vim.bo.filetype == "cs" then
+            vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter.indent'.get_indent()"
+          end
         end,
       })
 
@@ -118,16 +124,6 @@ return {
       local util = require("lspconfig.util")
       local mason_lspconfig = require("mason-lspconfig")
 
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = "*.cs",
-        callback = function()
-          for _, client in pairs(vim.lsp.get_active_clients({ name = "csharp_ls" })) do
-            if client.supports_method("workspace/diagnostic/refresh") then
-              client.request("workspace/diagnostic/refresh", nil, function() end)
-            end
-          end
-        end,
-      }) 
       -- Setup automatique via mason-lspconfig
       mason_lspconfig.setup_handlers({
         -- Handler par défaut
@@ -136,15 +132,25 @@ return {
             capabilities = capabilities,
           }
 
-          -- Config C# avec fix dotnet
+          -- Config C# avec support dotnet
           if server_name == "csharp_ls" then
-            local dotnet_root = vim.env.DOTNET_ROOT or home .. "/.dotnet"
+            local home = vim.fn.expand("$HOME")
+            -- Détecte le bon DOTNET_ROOT (peut être différent selon l'install)
+            local dotnet_root = vim.env.DOTNET_ROOT 
+              or (vim.fn.isdirectory(home .. "/dotnet") == 1 and home .. "/dotnet")
+              or (vim.fn.isdirectory(home .. "/.dotnet") == 1 and home .. "/.dotnet")
+              or "/usr/share/dotnet"
             
             config.cmd = { vim.fn.stdpath("data") .. "/mason/bin/csharp-ls" }
+            
+            -- Force l'environnement dotnet pour csharp-ls
+            local dotnet_version = vim.fn.system("dotnet --version"):gsub("\n", "")
             config.cmd_env = {
               DOTNET_ROOT = dotnet_root,
               PATH = dotnet_root .. ":" .. (vim.env.PATH or ""),
+              MSBuildSDKsPath = dotnet_root .. "/sdk/" .. dotnet_version .. "/Sdks",
             }
+            
             config.root_dir = function(fname)
               return util.root_pattern("*.sln", "*.csproj", "global.json")(fname)
                 or util.find_git_ancestor(fname)

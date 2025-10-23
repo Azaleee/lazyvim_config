@@ -371,6 +371,10 @@ function M.run_release()
   run_with_config("Release")
 end
 
+function M.run()
+  run_with_config("Debug")
+end
+
 function M.test()
   term_run({ "dotnet", "test" }, vim.fn.getcwd())
 end
