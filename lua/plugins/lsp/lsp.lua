@@ -27,7 +27,6 @@ return {
         ensure_installed = {
           "lua_ls",
           "pylsp",
-          "ruff",
           "jsonls",
           "sqlls",
           "terraformls",

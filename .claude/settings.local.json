@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nvim:*)",
+      "Bash(cat:*)",
+      "Bash(cmd.exe /c \"dir %LOCALAPPDATA%\\nvim-data\\mason\\packages\")",
+      "Bash(cmd.exe /c \"where dotnet\")",
+      "Bash(dotnet --version:*)",
+      "Bash(/usr/bin/dotnet:*)",
+      "Bash(/usr/local/bin/dotnet:*)",
+      "Bash(unzip:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet nuget add source:*)",
+      "Bash(wget:*)",
+      "Bash(curl:*)",
+      "Bash(tar:*)",
+      "Bash(~/.bashrc)",
+      "Bash(export PATH=\"/home/mosmont/.local/bin:$PATH\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

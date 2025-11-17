@@ -167,10 +167,6 @@ return {
         return selected_profile, selected_name
       end
 
-      vim.keymap.set("n", "<leader>dP", function()
-        last_launch_profile_name = nil
-        vim.notify("Profil de debug réinitialisé")
-      end, { desc = "Reset launch profile" })
       ------------------------------------------------------------------
       -- Config DAP pour C# avec launchSettings.json
       ------------------------------------------------------------------
@@ -232,20 +228,17 @@ return {
       }
 
       ------------------------------------------------------------------
-      -- Keymaps (sans UI auto)
+      -- Keymaps
       ------------------------------------------------------------------
       vim.keymap.set("n", "<F5>", dap.continue, { desc = "DAP Continue" })
+      vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "DAP Toggle Breakpoint" })
       vim.keymap.set("n", "<F10>", dap.step_over, { desc = "DAP Step Over" })
       vim.keymap.set("n", "<F11>", dap.step_into, { desc = "DAP Step Into" })
       vim.keymap.set("n", "<S-F11>", dap.step_out, { desc = "DAP Step Out" })
-      vim.keymap.set("n", "<F9>", dap.toggle_breakpoint, { desc = "DAP Toggle Breakpoint" })
 
-      -- Contrôle manuel de l'UI
       vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "Toggle DAP UI" })
       vim.keymap.set("n", "<Leader>do", dapui.open, { desc = "Open DAP UI" })
       vim.keymap.set("n", "<Leader>dc", dapui.close, { desc = "Close DAP UI" })
-
-      -- Autres raccourcis utiles
       vim.keymap.set("n", "<Leader>dr", dap.repl.toggle, { desc = "Toggle DAP REPL" })
       vim.keymap.set("n", "<Leader>dt", dap.terminate, { desc = "Terminate DAP" })
       vim.keymap.set("n", "<Leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
@@ -254,10 +247,14 @@ return {
         require("dapui").eval()
       end, { desc = "DAP Eval" })
 
-      -- Évalue et affiche dans un float
       vim.keymap.set({ "n", "v" }, "<Leader>dE", function()
         require("dapui").eval(nil, { enter = true })
       end, { desc = "DAP Eval (enter)" })
+
+      vim.keymap.set("n", "<Leader>dP", function()
+        last_launch_profile_name = nil
+        vim.notify("Profil de debug réinitialisé")
+      end, { desc = "Reset launch profile" })
     end,
   },
 

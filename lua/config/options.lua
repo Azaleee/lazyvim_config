@@ -2,12 +2,11 @@
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
 --
-vim.g.lazyvim_python_ruff = "ruff"
 
 vim.g.mapleader = " " -- Espace comme leader
 vim.g.maplocalleader = " "
 
-vim.o.guifont = "Terminess Nerd Font Mono:h15"
+vim.o.guifont = "ProFont IIx Nerd Font Mono:h11"
 
 vim.g.neovide_cursor_vfx_mode = "pixiedust"
 

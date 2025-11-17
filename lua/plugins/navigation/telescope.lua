@@ -1,37 +1,32 @@
--- lua/plugins/telescope.lua
 return {
   "nvim-telescope/telescope.nvim",
-  branch = "master",
+  cmd = "Telescope",
   dependencies = {
     "nvim-lua/plenary.nvim",
     {
       "nvim-telescope/telescope-fzf-native.nvim",
       build = "make",
-      cond = function()
-        return vim.fn.executable("make") == 1
-      end,
     },
     "nvim-telescope/telescope-ui-select.nvim",
     "nvim-tree/nvim-web-devicons",
   },
-  cmd = "Telescope",
   keys = {
-    { "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "[S]earch existing [B]uffers" },
-    { "<leader><tab>", "<cmd>Telescope buffers<cr>", desc = "[S]earch existing [B]uffers" },
-    { "<leader><leader>", "<cmd>Telescope buffers<cr>", desc = "[ ] Find existing buffers" },
-    { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "[S]earch [M]arks" },
-    { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Search [G]it [F]iles" },
-    { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Search [G]it [C]ommits" },
-    { "<leader>gcf", "<cmd>Telescope git_bcommits<cr>", desc = "Search [G]it [C]ommits for current [F]ile" },
-    { "<leader>gb", "<cmd>Telescope git_branches<cr>", desc = "Search [G]it [B]ranches" },
-    { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Search [G]it [S]tatus (diff view)" },
-    { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "[S]earch [F]iles" },
-    { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "[S]earch [H]elp" },
-    { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "[S]earch current [W]ord" },
-    { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "[S]earch by [G]rep" },
-    { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "[S]earch [D]iagnostics" },
-    { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "[S]earch [R]resume" },
-    { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "[S]earch Recent Files" },
+    { "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "[S]earch Buffers" },
+    { "<leader><tab>", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
+    { "<leader><leader>", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
+    { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "[S]earch Marks" },
+    { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+    { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git Commits" },
+    { "<leader>gcf", "<cmd>Telescope git_bcommits<cr>", desc = "Git Commits (file)" },
+    { "<leader>gb", "<cmd>Telescope git_branches<cr>", desc = "Git Branches" },
+    { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git Status" },
+    { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "[S]earch Files" },
+    { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "[S]earch Help" },
+    { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "[S]earch Word" },
+    { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "[S]earch by Grep" },
+    { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "[S]earch Diagnostics" },
+    { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "[S]earch Resume" },
+    { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "[S]earch Old files" },
     {
       "<leader>sds",
       function()
@@ -39,7 +34,7 @@ return {
           symbols = { "Class", "Function", "Method", "Constructor", "Interface", "Module", "Property" },
         })
       end,
-      desc = "[S]each LSP document [S]ymbols",
+      desc = "[S]earch Document Symbols",
     },
     {
       "<leader>s/",
@@ -49,7 +44,7 @@ return {
           prompt_title = "Live Grep in Open Files",
         })
       end,
-      desc = "[S]earch [/] in Open Files",
+      desc = "[S]earch in Open Files",
     },
     {
       "<leader>/",
@@ -58,13 +53,14 @@ return {
           previewer = false,
         }))
       end,
-      desc = "[/] Fuzzily search in current buffer",
+      desc = "Fuzzy search in buffer",
     },
   },
   config = function()
+    local telescope = require("telescope")
     local actions = require("telescope.actions")
 
-    require("telescope").setup({
+    telescope.setup({
       defaults = {
         layout_strategy = "horizontal",
         layout_config = {
@@ -99,12 +95,8 @@ return {
             },
           },
         },
-        marks = {
-          initial_mode = "normal",
-        },
-        oldfiles = {
-          initial_mode = "normal",
-        },
+        marks = { initial_mode = "normal" },
+        oldfiles = { initial_mode = "normal" },
       },
       extensions = {
         ["ui-select"] = {
@@ -113,8 +105,7 @@ return {
       },
     })
 
-    -- Enable telescope extensions
-    pcall(require("telescope").load_extension, "fzf")
-    pcall(require("telescope").load_extension, "ui-select")
+    pcall(telescope.load_extension, "fzf")
+    pcall(telescope.load_extension, "ui-select")
   end,
 }

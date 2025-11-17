@@ -1,5 +1,7 @@
 return {
   { "ibhagwan/fzf-lua", enabled = false },
+  { "folke/flash.nvim", enabled = false },
+  { "ggandor/leap.nvim", enabled = false },
   { "folke/trouble.nvim", keys = { { "<leader>d", false } } },
 
   -- lua/plugins/noice.lua
